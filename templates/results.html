@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Train Delay Analysis Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Delay Analysis Results</h1>
+        
+        <!-- Delay Statistics -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Delay Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-yellow-100 p-4 rounded">
+                    <h3 class="font-bold">15-29 mins</h3>
+                    <p class="text-2xl">{{ delay_stats['15-29 mins'] }}</p>
+                </div>
+                <div class="bg-blue-100 p-4 rounded">
+                    <h3 class="font-bold">30-59 mins</h3>
+                    <p class="text-2xl">{{ delay_stats['30-59 mins'] }}</p>
+                </div>
+                <div class="bg-red-100 p-4 rounded">
+                    <h3 class="font-bold">60+ mins</h3>
+                    <p class="text-2xl">{{ delay_stats['60+ mins'] }}</p>
+                </div>
+                <div class="bg-gray-100 p-4 rounded">
+                    <h3 class="font-bold">N/A</h3>
+                    <p class="text-2xl">{{ delay_stats['N/A'] }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detailed Delays -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Detailed Delays (15+ minutes)</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="px-4 py-2">Date</th>
+                            <th class="px-4 py-2">Scheduled</th>
+                            <th class="px-4 py-2">Expected</th>
+                            <th class="px-4 py-2">Delay (mins)</th>
+                            <th class="px-4 py-2">Platform</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for delay in detailed_delays %}
+                        <tr class="{% if delay.delay >= 60 %}bg-red-50{% elif delay.delay >= 30 %}bg-blue-50{% else %}bg-yellow-50{% endif %}">
+                            <td class="border px-4 py-2">{{ delay.date }}</td>
+                            <td class="border px-4 py-2">{{ delay.scheduled }}</td>
+                            <td class="border px-4 py-2">{{ delay.expected }}</td>
+                            <td class="border px-4 py-2">{{ delay.delay }}</td>
+                            <td class="border px-4 py-2">{{ delay.platform }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- All Services -->
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8">
+            <h2 class="text-2xl font-bold mb-4">All Services</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full table-auto">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="px-4 py-2">Date</th>
+                            <th class="px-4 py-2">Scheduled Arrival</th>
+                            <th class="px-4 py-2">Expected Arrival</th>
+                            <th class="px-4 py-2">Platform</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td class="border px-4 py-2">{{ service.date }}</td>
+                            <td class="border px-4 py-2">{{ service.scheduled_arrival }}</td>
+                            <td class="border px-4 py-2">{{ service.expected_arrival }}</td>
+                            <td class="border px-4 py-2">{{ service.platform }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="mt-8">
+            <a href="/" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                New Analysis
+            </a>
+        </div>
+    </div>
+</body>
+</html>
